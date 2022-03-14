@@ -91,9 +91,9 @@ func (h *Handler) DeleteComment(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Unable to parse UINT from id")
 	}
 
-	comment, err := h.Service.DeleteComment(uint(commentID))
-	if err != nil {
+	if err := h.Service.DeleteComment(uint(commentID)); err != nil {
 		fmt.Fprintf(w, "Failed to delete comment")
 	}
-	fmt.Fprintf(w, "%+v", comment)
+
+	fmt.Fprintf(w, "Succesfully deleted")
 }
