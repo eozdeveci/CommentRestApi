@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/eozdeveci/CommentRestApi/internal/comment"
 	"github.com/eozdeveci/CommentRestApi/internal/database"
 	transportHTTP "github.com/eozdeveci/CommentRestApi/internal/transport/http"
 )
@@ -15,12 +16,14 @@ func (app *App) Run() error {
 
 	var err error
 
-	_, err = database.NewDatabase()
+	db, err := database.NewDatabase()
 	if err != nil {
 		return err
 	}
 
-	handler := transportHTTP.NewHandler()
+	commentService := comment.NewService(db)
+
+	handler := transportHTTP.NewHandler(commentService)
 	handler.SetupRoutes()
 
 	if err := http.ListenAndServe(":8080", handler.Router); err != nil {
