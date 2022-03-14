@@ -1,18 +1,27 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/eozdeveci/CommentRestApi/internal/comment"
 	"github.com/eozdeveci/CommentRestApi/internal/database"
 	transportHTTP "github.com/eozdeveci/CommentRestApi/internal/transport/http"
+
+	log "github.com/sirupsen/logrus"
 )
 
-type App struct{}
+type App struct {
+	Name    string
+	Version string
+}
 
 func (app *App) Run() error {
-	fmt.Println("Setting up APP")
+	log.SetFormatter(&log.JSONFormatter{})
+	log.WithFields(
+		log.Fields{
+			"AppName":    app.Name,
+			"AppVersion": app.Version,
+		}).Info("Setting up application")
 
 	var err error
 
@@ -32,17 +41,19 @@ func (app *App) Run() error {
 	handler.SetupRoutes()
 
 	if err := http.ListenAndServe(":8080", handler.Router); err != nil {
-		fmt.Println("Failed to set up server")
+		log.Error("Failed to set up server")
 		return err
 	}
 	return nil
 }
 
 func main() {
-	fmt.Println("Go - Comment Rest Api")
-	app := App{}
+	app := App{
+		Name:    "Comment Rest Api",
+		Version: "1.0",
+	}
 	if err := app.Run(); err != nil {
-		fmt.Println("Error starting up Rest Api")
-		fmt.Println(err)
+		log.Error("Error starting up Rest Api")
+		log.Fatal(err)
 	}
 }
