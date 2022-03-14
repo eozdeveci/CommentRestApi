@@ -25,7 +25,8 @@ func (h *Handler) SetupRoutes() {
 	h.Router = mux.NewRouter()
 
 	h.Router.HandleFunc("/api/comment/{id}", h.GetComment).Methods(http.MethodGet)
-	h.Router.HandleFunc("/api/comment/", h.PostComment).Methods(http.MethodPost)
+	h.Router.HandleFunc("/api/comment", h.GetAllComments).Methods(http.MethodGet)
+	h.Router.HandleFunc("/api/comment", h.PostComment).Methods(http.MethodPost)
 	h.Router.HandleFunc("/api/comment/{id}", h.UpdateComment).Methods(http.MethodPut)
 	h.Router.HandleFunc("/api/comment/{id}", h.DeleteComment).Methods(http.MethodDelete)
 
@@ -50,7 +51,7 @@ func (h *Handler) GetComment(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%+v", comment)
 }
 
-func (h *Handler) GetAllComment(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GetAllComments(w http.ResponseWriter, r *http.Request) {
 
 	comments, err := h.Service.GetAllComments()
 	if err != nil {
