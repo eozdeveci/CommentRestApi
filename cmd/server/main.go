@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/eozdeveci/CommentRestApi/internal/database"
 	transportHTTP "github.com/eozdeveci/CommentRestApi/internal/transport/http"
 )
 
@@ -11,6 +12,13 @@ type App struct{}
 
 func (app *App) Run() error {
 	fmt.Println("Setting up APP")
+
+	var err error
+
+	_, err = database.NewDatabase()
+	if err != nil {
+		return err
+	}
 
 	handler := transportHTTP.NewHandler()
 	handler.SetupRoutes()
