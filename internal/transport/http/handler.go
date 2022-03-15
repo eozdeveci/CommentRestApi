@@ -99,7 +99,7 @@ func (h *Handler) SetupRoutes() {
 	h.Router.Use(LoggingMiddleware)
 
 	h.Router.HandleFunc("/api/comment", h.GetAllComments).Methods(http.MethodGet)
-	h.Router.HandleFunc("/api/comment", JWTAuth(h.PostComment)).Methods(http.MethodPost)
+	h.Router.HandleFunc("/api/comment", h.PostComment).Methods(http.MethodPost)
 	h.Router.HandleFunc("/api/comment/{id}", h.GetComment).Methods(http.MethodGet)
 	h.Router.HandleFunc("/api/comment/{id}", h.UpdateComment).Methods(http.MethodPut)
 	h.Router.HandleFunc("/api/comment/{id}", h.DeleteComment).Methods(http.MethodDelete)
